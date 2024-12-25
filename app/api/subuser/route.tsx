@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 // import { ObjectId } from "mongodb"; 
 // import mongoose from "mongoose";
 
-export async function POST(request) {
+export async function POST(request: { formData: () => any; }) {
   try {
     const formData = await request.formData();
     const userId = formData.get("userId");
@@ -37,11 +37,11 @@ export async function POST(request) {
     }
   } catch (error) {
     console.error("Error saving data:", error);
-    return NextResponse.json({ error: "Failed to save form data. Details: " + error.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to save form data. Details: " }, { status: 500 });
   }
 }
 
-export async function PUT(request) {
+export async function PUT(request: { json: () => PromiseLike<{ userId: any; taskName: any; status: any; }> | { userId: any; taskName: any; status: any; }; }) {
   try {
     const { userId, taskName, status } = await request.json();
 
@@ -59,7 +59,7 @@ export async function PUT(request) {
     }
 
     // Find the specific task
-    const task = user.tasks.find((t) => t.taskName === taskName);
+    const task = user.tasks.find((t: { taskName: any; }) => t.taskName === taskName);
 
     if (!task) {
       return NextResponse.json({ error: "Task not found." }, { status: 404 });
@@ -73,7 +73,7 @@ export async function PUT(request) {
     return NextResponse.json({ message: "Task status updated successfully!", task }, { status: 200 });
   } catch (error) {
     console.error("Error updating task:", error);
-    return NextResponse.json({ error: "Failed to update task. Details: " + error.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update task. Details: "  }, { status: 500 });
   }
 }
 
