@@ -9,5 +9,5 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",  // Disable explicit return types for module boundaries
     "@typescript-eslint/no-unused-vars": "warn",  // Warn on unused variables, not an error
     "@typescript-eslint/no-inferrable-types": "off"  // Disable type inference checks
-  }
+  },
 }
