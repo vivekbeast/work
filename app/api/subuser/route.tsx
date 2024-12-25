@@ -41,7 +41,7 @@ export async function POST(request) {
   }
 }
 
-export async function PUT(request: { json: () => PromiseLike<{ userId: any; taskName: any; status: any; }> | { userId: any; taskName: any; status: any; }; }) {
+export async function PUT(request) {
   try {
     const { userId, taskName, status } = await request.json();
 
