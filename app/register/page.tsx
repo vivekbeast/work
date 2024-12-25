@@ -51,8 +51,8 @@ const SignUpMainPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: session.user.name,
-          email: session.user.email,
+          name: session?.user?.name ?? 'Fallback Name',
+email: session?.user?.email ?? 'Fallback Email',
           companyName,
         }),
       });
