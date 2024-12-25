@@ -4,11 +4,13 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import '../globals.css';
 import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const NavBar = () => {
 
   const {  data: session } = useSession();
   const [changeLog, setChangeLog] = useState(false);
+  const router = useRouter();
 
   const handleSignOut = (e) => {
     e.preventDefault(); // Prevent default link behavior
@@ -71,12 +73,13 @@ const NavBar = () => {
           Sign Out
         </Link>
         </div> : <div className=' '>
-        <Link
-          href="/login"
-          className="bg-white text-lg font-semibold text-[#fd7e1d] py-2  px-4 rounded-md font-comfortaa hover:bg-gray-200 transition"
+        <div
+          // href="/login"
+          onClick={()=> router.push("/login")}
+          className="bg-white text-lg font-semibold text-[#fd7e1d] py-2 cursor-pointer px-4 rounded-md font-comfortaa hover:bg-gray-200 transition"
         >
           Login
-        </Link>
+        </div>
         </div>}
       </div>
     </div>
