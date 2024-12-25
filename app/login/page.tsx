@@ -2,8 +2,7 @@ import React from 'react'
 import LoginForm from '../components/LoginForm'
 
 
-const page = () => {
-
+const LoginPage = () => {
   return (
     <div className=' bg-orange-200'>
       <LoginForm />
@@ -11,4 +10,4 @@ const page = () => {
   )
 }
 
-export default page
+export default LoginPage
