@@ -1,8 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Modak&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
+
+.modak{
+  font-family: "Modak", system-ui;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.comfortaa {
+  font-family: "Comfortaa", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -18,4 +33,4 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
+} */

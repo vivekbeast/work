@@ -8,9 +8,9 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+      fontFamily: {
+        modak: ['Modak', 'sans-serif'],
+        comfortaa: ['Comfortaa', 'serif'],
       },
     },
   },
