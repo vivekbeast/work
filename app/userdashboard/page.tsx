@@ -27,7 +27,12 @@ const Userdashboard = () => {
             setError(data.error || "Failed to load tasks.");
           }
         } catch (error) {
-          setError("An error occurred while fetching tasks.");
+          // TypeScript error handling (casting error to `unknown` and then narrowing it down)
+          if (error instanceof Error) {
+            setError(error.message); // Safe access to `message`
+          } else {
+            setError("An unexpected error occurred.");
+          }
         } finally {
           setLoading(false); // Hide loading state
         }

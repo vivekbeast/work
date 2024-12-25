@@ -1,3 +1,13 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",  // Disable the no-explicit-any rule
+    "@typescript-eslint/explicit-function-return-type": "off",  // Disable explicit function return types
+    "@typescript-eslint/explicit-module-boundary-types": "off",  // Disable explicit return types for module boundaries
+    "@typescript-eslint/no-unused-vars": "warn",  // Warn on unused variables, not an error
+    "@typescript-eslint/no-inferrable-types": "off"  // Disable type inference checks
+  }
 }

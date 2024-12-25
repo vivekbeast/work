@@ -8,7 +8,7 @@ import {  toast } from 'sonner'
 const DashBoard = () => {
   const [uniqueCompanyNames, setUniqueCompanyNames] = useState([]);
   const { data: session } = useSession();
-  const [companyName, setCompanyName] = useState();
+  // const [companyName, setCompanyName] = useState();
   const [userId, setUserId] = useState("");
   const [taskName, setTaskName] = useState("");
   const [taskDate, setTaskDate] = useState("");
@@ -28,7 +28,7 @@ const DashBoard = () => {
             }
             setUniqueCompanyNames(companyNamesArray);
           }
-          setCompanyName(data?.companyName);
+          // setCompanyName(data?.companyName);
         })
         .catch((error) => {
           console.error('Error fetching user data:', error);

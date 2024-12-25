@@ -12,7 +12,7 @@ const authOption = {
         }),
     ],
     callbacks: {
-        async signIn({user , account }){
+        async signIn({ user, account }: { user: any; account: any }){
             console.log("User", user);
             console.log("Account", account);
             if(account.provider === 'google'){
