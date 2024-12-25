@@ -1,10 +1,12 @@
 import User from "@/models/user";
 import { connectMongodb } from "@/lib/mongodb";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-
-export async function POST(request) {
+// POST request: User Registration
+export async function POST(request: NextRequest) {
+  try {
     const { name, email, companyName } = await request.json();
+
     if (!name || !email || !companyName) {
       return NextResponse.json(
         { error: "Name, email, and company name are required." },
@@ -12,16 +14,23 @@ export async function POST(request) {
       );
     }
 
-        await connectMongodb();
-        await User.create({ name, email, companyName });
-        return NextResponse.json({ message: "User Registered" }, { status: 201 });
-    
+    await connectMongodb();
+    await User.create({ name, email, companyName });
+
+    return NextResponse.json({ message: "User Registered" }, { status: 201 });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return NextResponse.json(
+      { error: "An error occurred while registering the user." },
+      { status: 500 }
+    );
+  }
 }
 
-
-export async function GET(request) {
+// GET request: Fetch User Details by Email
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const email = searchParams.get('email'); // Retrieve email from query parameters
+  const email = searchParams.get("email"); // Retrieve email from query parameters
 
   if (!email) {
     return NextResponse.json(

@@ -1,10 +1,8 @@
-import SubuserForm from "@/models/subuser";
+import { NextRequest, NextResponse } from "next/server";
 import { connectMongodb } from "@/lib/mongodb";
-import { NextResponse } from "next/server";
-// import { ObjectId } from "mongodb"; 
-// import mongoose from "mongoose";
+import SubuserForm from "@/models/subuser";
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const userId = formData.get("userId");
@@ -41,7 +39,7 @@ export async function POST(request) {
   }
 }
 
-export async function PUT(request) {
+export async function PUT(request: NextRequest) {
   try {
     const { userId, taskName, status } = await request.json();
 
@@ -77,12 +75,7 @@ export async function PUT(request) {
   }
 }
 
-
-
-
-
-
-export async function GET(request) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
 
