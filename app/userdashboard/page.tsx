@@ -294,7 +294,7 @@ const Userdashboard = () => {
           )}
         </div>
       </div>
-    </Suspense>  {/* Wrapping the component in Suspense */}
+    </Suspense>  
   );
 };
 
