@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 // import { ObjectId } from "mongodb"; 
 // import mongoose from "mongoose";
 
-export async function POST(request: { formData: () => any; }) {
+export async function POST(request) {
   try {
     const formData = await request.formData();
     const userId = formData.get("userId");
