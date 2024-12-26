@@ -5,13 +5,22 @@ import { motion } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa"; // Importing Icons from react-icons
 import { toast } from "react-toastify";
 
-// Fallback component while waiting for Suspense
-const LoadingFallback = () => <div>Loading...</div>;
+
 
 const Userdashboard = () => {
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
-  const [tasks, setTasks] = useState<any[]>([]); // Store tasks as an array of any type
+  type Task = {
+    _id: string;
+    taskName: string;
+    taskDescription: string;
+    taskDate: Date;
+    submissionDate: Date;
+    status: string;
+  };
+  
+  const [tasks, setTasks] = useState<Task[]>([]);  
+  // const [tasks, setTasks] = useState<any[]>([]); // Store tasks as an array of any type
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false); // To control the visibility of the modal
@@ -44,6 +53,8 @@ const Userdashboard = () => {
       fetchUserTasks();
     }
   }, [userId]);
+
+  const LoadingFallback = () => <div>Loading...</div>;
 
   // Handle task status change with confirmation modal
   const handleTaskStatusChange = (taskName: string, status: string) => {
@@ -120,7 +131,7 @@ const Userdashboard = () => {
   };
 
   return (
-    <Suspense fallback={<LoadingFallback />}> {/* Suspense boundary with fallback */}
+    <Suspense fallback={<LoadingFallback />}>
       <div className="h-screen flex flex-col justify-start items-start overflow-hidden font-comfortaa">
         <div className="relative z-10 w-full max-w-6xl p-8 flex flex-col gap-8">
           <div className=" w-screen flex flex-col gap-4">
