@@ -144,11 +144,11 @@ const Userdashboard = () => {
               User Dashboard
             </motion.h1>
 
-            {userId && (
+            {/* {userId && ( */}
               <p className="text-center text-lg font-medium text-gray-600">
-                Welcome, User ID: {userId}
+                Welcome
               </p>
-            )}
+            {/* )} */}
           </div>
 
           {/* Loading State */}
