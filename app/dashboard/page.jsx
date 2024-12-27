@@ -34,7 +34,12 @@ const handleTaskchange = (e) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  if (!uniqueCompanyNames.some(companyId => companyId === userId)) {
+  // Log the values for debugging
+  console.log("User ID:", userId);
+  console.log("Unique Company Names:", uniqueCompanyNames);
+
+  // Check if the userId is in the list of uniqueCompanyNames
+  if (!uniqueCompanyNames.some(name => name === userId)) {
     setErrorMessage("Invalid User ID! Please use a valid User ID.");
     return;
   }
@@ -45,8 +50,7 @@ const handleSubmit = async (e) => {
   formData.append("taskDate", taskDate);
   formData.append("submissionDate", submissionDate);
   formData.append("taskDescription", taskDescription);
-  formData.append("taskName",taskName);
-  
+  formData.append("taskName", taskName);
 
   const promise = fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser`, {
     method: "POST",
@@ -61,19 +65,18 @@ const handleSubmit = async (e) => {
     loading: "Submitting...",
     success: (data) => `${data.message} , Reload the page once the task is added.`,
     error: (err) => `Error: ${err.message}`,
-}, {
+  }, {
     duration: 3000,
     style: {
-        fontSize: '22px', // Enlarge the font size
-        background: '#28a745', // Green background for success
-        color: 'white', // White text
-        padding: '28px 25px', // Padding around the text
-        borderRadius: '8px', // Rounded corners
-        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', // Shadow effect
-        fontWeight: 'bold', // Make the font bold
+      fontSize: '22px',
+      background: '#28a745',
+      color: 'white',
+      padding: '28px 25px',
+      borderRadius: '8px',
+      boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+      fontWeight: 'bold',
     }
-});
-
+  });
 
   try {
     await promise;
@@ -86,6 +89,7 @@ const handleSubmit = async (e) => {
     console.error("Submission Error:", err);
   }
 };
+
 
 
 
@@ -145,6 +149,7 @@ const handleSubmit = async (e) => {
               companyNamesArray.push(`${data.companyName}${i}`);
             }
             setUniqueCompanyNames(companyNamesArray);
+            console.log(setUniqueCompanyNames);
           }
           // setCompanyName(data?.companyName);
         })
