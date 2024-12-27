@@ -210,13 +210,7 @@ useEffect(() => {
         <h1 className="w-full h-[50px] font-semibold rounded-t-lg text-black py-3 bg-orange-400">
           ID - <span className='text-black'>{userId}</span>
         </h1>
-        <div className=' h-[100px]'>
-          <div className="flex flex-row justify-center items-center gap-2">
-            <h2 className="text-sm font-medium">Status:</h2>
-            <div className="text-sm font-semibold text-green-500">
-              {taskCount > 0 ? 'Completed' : 'Pending'}
-            </div>
-          </div>
+        <div className=' h-[100px] flex justify-center items-center'>
           <div className="">
             <h3 className="font-medium">Number of tasks: {taskCount}</h3>
             <button
