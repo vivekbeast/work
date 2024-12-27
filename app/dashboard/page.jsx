@@ -140,12 +140,16 @@ const handleSubmit = async (e) => {
 
   useEffect(() => {
     if (session?.user) {
-      console.log('Session Data:', session); // Log session data to ensure the email is present
+      const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session.user.email}`;
+      console.log("Constructed API URL:", apiUrl);
   
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session?.user.email}`)
-        .then((response) => response.json())
+      fetch(apiUrl)
+        .then((response) => {
+          console.log("API Response Status:", response.status);
+          return response.json();
+        })
         .then((data) => {
-          console.log('API Response:', data); // Log API response to see if companyName is present
+          console.log("API Response Data:", data);
   
           if (data?.companyName) {
             let companyNamesArray = [];
@@ -154,15 +158,17 @@ const handleSubmit = async (e) => {
             }
             setUniqueCompanyNames(companyNamesArray);
           } else {
-            console.error('No company name found in response');
+            console.error("No company name found in API response");
           }
         })
         .catch((error) => {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
         });
     }
+
     fetchUserTasks();
   }, [session]);
+  
   
   
 
