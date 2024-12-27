@@ -118,14 +118,15 @@ const DashBoard = () => {
   };
 
   // Group tasks by userId
-  const groupedTasks = taskData.reduce((acc, user) => {
-    if (!acc[user.userId]) {
-      acc[user.userId] = [];
+
+  const groupedTasks = taskData.reduce((acc, task) => {
+    if (!acc[task.userId]) {
+      acc[task.userId] = [];
     }
-    acc[user.userId].push(...user.tasks);
+    acc[task.userId].push(task);
     return acc;
   }, {});
-
+  
   // Open and close the task detail popup
   const handleOpenPopup = (userId) => {
     setSelectedUserId(userId);
@@ -176,29 +177,34 @@ const DashBoard = () => {
           )}
         </div>
         {popupOpen && selectedUserId && (
-          <div className="popup fixed w-screen h-screen inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg w-1/2 h-1/2 overflow-y-scroll">
-              <h2 className="text-xl font-semibold mb-4">Tasks for {selectedUserId}</h2>
-              <div className="space-y-4">
-                {groupedTasks[selectedUserId]?.map((task, index) => (
-                  <div key={index} className="task-item">
-                    <p><strong>Task {index + 1}:</strong></p>
-                    <p className=' overflow-x-scroll'>Description: {task.taskDescription}</p>
-                    <p>Status: {task.status}</p>
-                    <p>Task Date: {new Date(task.taskDate).toLocaleDateString()}</p>
-                    <p>Submission Date: {new Date(task.submissionDate).toLocaleDateString()}</p>
-                  </div>
-                ))}
-              </div>
-              <button
-                className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
-                onClick={handleClosePopup}
-              >
-                Close
-              </button>
+  <div className="popup fixed w-screen h-screen inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg w-1/2 h-1/2 overflow-y-scroll">
+      <h2 className="text-xl font-semibold mb-4">Tasks for {selectedUserId}</h2>
+      <div className="space-y-4 ">
+        {Array.isArray(groupedTasks[selectedUserId]) && groupedTasks[selectedUserId].length > 0 ? (
+          groupedTasks[selectedUserId].map((task, index) => (
+            <div key={index} className="task-item">
+              <p><strong>Task {index + 1}:</strong></p>
+              <p className='overflow-x-scroll'>Description: {task.taskDescription}</p>
+              <p>Status: {task.status}</p>
+              <p>Task Date: {new Date(task.taskDate).toLocaleDateString()}</p>
+              <p>Submission Date: {new Date(task.submissionDate).toLocaleDateString()}</p>
             </div>
-          </div>
+          ))
+        ) : (
+          <p>No tasks found for this user.</p>
         )}
+      </div>
+      <button
+        className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
+        onClick={handleClosePopup}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
       </div>
 
       <div className="flex flex-col w-1/2 justify-center items-center h-auto mb-7">
