@@ -8,7 +8,7 @@ import {  toast } from 'sonner'
 const DashBoard = () => {
   const [uniqueCompanyNames, setUniqueCompanyNames] = useState([]);
   const { data: session } = useSession();
-  // const [companyName, setCompanyName] = useState();
+  const [companyName, setCompanyName] = useState();
   const [userId, setUserId] = useState("");
   const [taskName, setTaskName] = useState("");
   const [taskDate, setTaskDate] = useState("");
@@ -162,9 +162,11 @@ useEffect(() => {
             (_, i) => `${data.companyName}${i + 1}`
           );
           setUniqueCompanyNames(companyNamesArray);
+          
         } else {
           console.error("No company name found in API response");
         }
+        setCompanyName(data?.companyName)
       } else {
         console.error(data.error || "Failed to fetch user data");
         alert(data.error || "Failed to load user data.");
@@ -214,7 +216,7 @@ useEffect(() => {
           <div className="">
             <h3 className="font-medium">Number of tasks: {taskCount}</h3>
             <button
-              className="text-sm text-blue-500"
+              className="text-sm text-blue-500 underline"
               onClick={() => handleOpenPopup(userId)}
             >
               View Tasks
@@ -255,7 +257,7 @@ useEffect(() => {
       <div className="flex flex-col w-1/2 justify-center items-center h-auto mb-7">
         <div className="w-full flex items-center justify-center text-start mt-10">
           <h2 className="text-xl font-semibold whitespace-normal tracking-wide font-comfortaa text-start w-full text-black">
-          Unique Employee IDs in Live Report Section
+          Unique Employee IDs from {companyName}0 - {companyName}9
           </h2>
         </div>
         <div className="w-fit h-[500px] flex flex-col justify-center items-center bg-white mt-4 py-4 px-11 rounded-lg shadow-lg">
