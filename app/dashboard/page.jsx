@@ -1,9 +1,7 @@
-"use client";
 import { useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import { BiXCircle } from 'react-icons/bi';
-import {  toast } from 'sonner'
-
+import { toast } from 'sonner';
 
 const DashBoard = () => {
   const [uniqueCompanyNames, setUniqueCompanyNames] = useState([]);
@@ -16,30 +14,62 @@ const DashBoard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [taskData, setTasksData] = useState([]);
   const [uniqueUserIds, setUniqueUserIds] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
 
-  // Filter tasks based on companyNamesArray
-  const filteredTaskData = taskData.filter((task) =>
-    uniqueCompanyNames.includes(task.userId)
-  );
-
-  const handleUserIdChange = (e) => {
-    setUserId(e.target.value);
+  // Fetch and set unique company names based on the logged-in user's company
+  const fetchUniqueCompanyNames = async () => {
+    if (session?.user) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user?email=${session.user.email}`);
+        const data = await response.json();
+        
+        if (data?.companyName) {
+          let companyNamesArray = [];
+          for (let i = 1; i <= 9; i++) {
+            companyNamesArray.push(`${data.companyName}${i}`);
+          }
+          setUniqueCompanyNames(companyNamesArray);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    }
   };
 
-  const handleTaskChange = (e) => {
-    setTaskName(e.target.value);
+  // Fetch tasks data for users
+  const fetchUserTasks = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setTasksData(data.userNames); // Set tasks to state
+      } else {
+        alert(data.error || "Failed to load tasks.");
+      }
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
   };
 
+  useEffect(() => {
+    fetchUniqueCompanyNames();
+    fetchUserTasks();
+  }, [session]);
+
+  // Filter tasks for live report section based on userId
+  const filteredTaskData = taskData.filter(task => uniqueCompanyNames.includes(task.userId));
+
+  // Handle submitting a new task
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (!uniqueCompanyNames.includes(userId)) {
-    //   setErrorMessage("Invalid User ID! Please use a valid User ID.");
-    //   return;
-    // }
-    // setErrorMessage("");
+    
+    if (!uniqueCompanyNames.includes(userId)) {
+      setErrorMessage("Invalid User ID! Please use a valid User ID.");
+      return;
+    }
+    setErrorMessage("");
 
     const formData = new FormData();
     formData.append("userId", userId);
@@ -86,6 +116,7 @@ const DashBoard = () => {
     }
   };
 
+  // Group tasks by userId
   const groupedTasks = taskData.reduce((acc, user) => {
     if (!acc[user.userId]) {
       acc[user.userId] = [];
@@ -94,6 +125,7 @@ const DashBoard = () => {
     return acc;
   }, {});
 
+  // Open and close the task detail popup
   const handleOpenPopup = (userId) => {
     setSelectedUserId(userId);
     setPopupOpen(true);
@@ -104,76 +136,22 @@ const DashBoard = () => {
     setSelectedUserId(null);
   };
 
-  const fetchUserTasks = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setTasksData(data.userNames); // Set tasks to state
-        console.log(taskData);
-      } else {
-        alert(data.error || "Failed to load tasks.");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message); // Safe access to `message`
-      } else {
-        alert("An unexpected error occurred.");
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (session?.user) {
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session.user.email}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data?.companyName) {
-            let companyNamesArray = [];
-            for (let i = 1; i <= 9; i++) {
-              companyNamesArray.push(`${data.companyName}${i}`);
-            }
-            setUniqueCompanyNames(companyNamesArray);
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching user data:', error);
-        });
-    }
-
-    fetchUserTasks();
-  }, [session]);
-
-  // Get unique userIds
-  useEffect(() => {
-    const userIds = taskData.map((user) => user.userId);
-    setUniqueUserIds(Array.from(new Set(userIds))); // Remove duplicates
-  }, [taskData]);
-
   return (
     <div className='h-auto w-screen flex flex-row justify-center items-center px-4 pb-20'>
-      <div className="w-1/2 flex flex-col justify-center items-center mt-8 ">
-        <h1 className="font-comfortaa text-start w-full text-3xl text-black pl-11 tracking-wide font-medium">Live Report</h1>
-        <div className="grid grid-cols-3 gap-6 justify-center items-center">
-          {filteredTaskData.length === 0 ? (
-            <div className="h-[150px] w-[200px] bg-white flex justify-center flex-col text-center rounded-lg mt-4 shadow-lg">
-              <h1 className="w-full h-[50px] font-semibold rounded-t-lg text-black py-3 bg-orange-400">
-                No data yet created
-              </h1>
-            </div>
-          ) : (
-            uniqueUserIds.map((userId, index) => {
+      <div className='w-1/2 flex flex-col justify-center items-center mt-8'>
+        <h1 className=' font-comfortaa text-start w-full text-3xl text-black pl-11 tracking-wide font-medium'>Live Report</h1>
+        <div className='grid grid-cols-3 gap-6 justify-center items-center'>
+          {filteredTaskData.length > 0 ? (
+            filteredTaskData.map((userId, index) => {
               const tasks = groupedTasks[userId] || [];
               const taskCount = tasks.length;
-
               return (
                 <div key={index} className="h-[150px] w-[200px] bg-white flex justify-center flex-col text-center rounded-lg mt-4 shadow-lg">
                   <h1 className="w-full h-[50px] font-semibold rounded-t-lg text-black py-3 bg-orange-400">
-                    ID - <span className="text-black">{userId}</span>
+                    ID - <span className='text-black'>{userId}</span>
                   </h1>
-                  <div className="h-[100px]">
-                    <div className="flex flex-row justify-center items-center gap-2">
+                  <div className=' h-[100px]'>
+                    <div className=" flex flex-row justify-center items-center gap-2">
                       <h2 className="text-sm font-medium">Status:</h2>
                       <div className="text-sm font-semibold text-green-500">
                         {taskCount > 0 ? 'Completed' : 'Pending'}
@@ -192,17 +170,19 @@ const DashBoard = () => {
                 </div>
               );
             })
+          ) : (
+            <div>No tasks available for the selected user IDs. Data not yet created.</div>
           )}
         </div>
         {popupOpen && selectedUserId && (
           <div className="popup fixed w-screen h-screen inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg w-1/2 h-1/2 overflow-y-scroll">
               <h2 className="text-xl font-semibold mb-4">Tasks for {selectedUserId}</h2>
-              <div className="space-y-4 ">
+              <div className="space-y-4">
                 {groupedTasks[selectedUserId]?.map((task, index) => (
                   <div key={index} className="task-item">
                     <p><strong>Task {index + 1}:</strong></p>
-                    <p className="overflow-x-scroll">Description: {task.taskDescription}</p>
+                    <p className=' overflow-x-scroll'>Description: {task.taskDescription}</p>
                     <p>Status: {task.status}</p>
                     <p>Task Date: {new Date(task.taskDate).toLocaleDateString()}</p>
                     <p>Submission Date: {new Date(task.submissionDate).toLocaleDateString()}</p>
@@ -223,12 +203,11 @@ const DashBoard = () => {
       <div className="flex flex-col w-1/2 justify-center items-center h-auto mb-7">
         <div className="w-full flex items-center justify-center text-start mt-10">
           <h2 className="text-xl font-semibold whitespace-normal tracking-wide font-comfortaa text-start w-full text-black">
-          Unique Employee IDs in Live Report Section
+            Unique Employee IDs in Live Report Section
           </h2>
         </div>
         <div className="w-fit h-[500px] flex flex-col justify-center items-center bg-white mt-4 py-4 px-11 rounded-lg shadow-lg">
           <h2 className="text-3xl font-medium tracking-wide font-modak text-center mb-2 text-[#fd7e1d]">Work Submission Form</h2>
-
           <form onSubmit={handleSubmit} className="h-[80%] flex flex-col justify-center gap-10 items-center">
             <div className='grid grid-cols-2 space-y-0 space-x-8'>
               <div className='space-y-12'>
@@ -237,11 +216,11 @@ const DashBoard = () => {
                   <input
                     type="text"
                     value={userId}
-                    onChange={handleUserIdChange}
+                    onChange={(e) => setUserId(e.target.value)}
                     required
                     className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
                   />
-                  {/* {errorMessage && (
+                  {errorMessage && (
                     <div className="absolute z-20 top-12 left-0 w-full bg-red-500 text-white text-sm p-2 rounded-lg text-center">
                       <div className="flex justify-between items-center">
                         <span>{errorMessage}</span>
@@ -250,7 +229,7 @@ const DashBoard = () => {
                         </button>
                       </div>
                     </div>
-                  )} */}
+                  )}
                 </div>
                 <div className="relative flex flex-col">
                   <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Date</label>
@@ -274,12 +253,12 @@ const DashBoard = () => {
                 </div>
               </div>
               <div className='space-y-6'>
-              <div className="relative flex flex-col">
+                <div className="relative flex flex-col">
                   <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Name</label>
                   <input
                     type="text"
                     value={taskName}
-                    onChange={handleTaskChange}
+                    onChange={(e) => setTaskName(e.target.value)}
                     required
                     className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
                   />
@@ -298,7 +277,7 @@ const DashBoard = () => {
               </div>
             </div>
             <div className="flex justify-center items-center self-center">
-              <button type="submit"  className="px-8 py-3 text-md font-medium bg-black text-white rounded-lg shadow-md hover:text-[#fd7e1d] transition duration-300">
+              <button type="submit" className="px-8 py-3 text-md font-medium bg-black text-white rounded-lg shadow-md hover:text-[#fd7e1d] transition duration-300">
                 Submit Task
               </button>
             </div>
@@ -310,7 +289,3 @@ const DashBoard = () => {
 };
 
 export default DashBoard;
-
-
-
-
