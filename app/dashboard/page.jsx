@@ -143,24 +143,24 @@ const handleSubmit = async (e) => {
       fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session.user.email}`)
         .then((response) => response.json())
         .then((data) => {
+          console.log('API Response:', data); // Log the response data
+  
           if (data?.companyName) {
             let companyNamesArray = [];
             for (let i = 1; i <= 9; i++) {
               companyNamesArray.push(`${data.companyName}${i}`);
             }
             setUniqueCompanyNames(companyNamesArray);
-            console.log(setUniqueCompanyNames);
+          } else {
+            console.error('No company name found in response');
           }
-          // setCompanyName(data?.companyName);
         })
         .catch((error) => {
           console.error('Error fetching user data:', error);
         });
     }
-
-
-      fetchUserTasks();
   }, [session]);
+  
 
     // Get unique userIds
     useEffect(() => {
