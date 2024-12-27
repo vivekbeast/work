@@ -161,6 +161,7 @@ const handleSubmit = async (e) => {
           console.error('Error fetching user data:', error);
         });
     }
+    fetchUserTasks();
   }, [session]);
   
   
