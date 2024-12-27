@@ -66,20 +66,20 @@ const NavBar = () => {
             <h1 className=' font-comfortaa font-medium'>Hello!!, {session?.user?.name}</h1>
           </div>
           <Link
-          href="/login"
+          href="/loginpage"
           onClick={handleSignOut}
           className="bg-white text-[#fd7e1d] py-2 px-4 h-full rounded-md font-comfortaa hover:bg-gray-200 transition"
         >
           Sign Out
         </Link>
         </div> : <div className=' '>
-        <div
-          // href="/login"
-          onClick={()=> router.push("/login")}
+        <Link
+          href="/login"
+          // onClick={()=> router.push("/loginpage")}
           className="bg-white text-lg font-semibold text-[#fd7e1d] py-2 cursor-pointer px-4 rounded-md font-comfortaa hover:bg-gray-200 transition"
         >
           Login
-        </div>
+        </Link>
         </div>}
       </div>
     </div>

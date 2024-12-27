@@ -10,13 +10,13 @@
 //   const [hideFirst, setHideFirst] = useState(true);
 //   const router = useRouter();
 
-//   const handleSelectChange = (value: string) => {
+//   const handleSelectChange = (value) => {
 //     setShowForm(value);
 //     setHideFirst(false);
 //   };
 
 
-//   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+//   const handleSubmit = async (e) => {
 //     e.preventDefault();
   
 //     const formData = new FormData(e.currentTarget);

@@ -2,21 +2,23 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaUser, FaUserShield } from "react-icons/fa"; // For user and admin icons
-import animationData from "../../public/Animation - 1734605394841.json";
-import Lottie from "react-lottie";
+// import animationData from "../../public/animationn.json";
+// import Lottie from "react-lottie";
+import { motion } from "framer-motion";
+// import svgdata from "../../public/animationn.svg"
 
 const LoginPage = () => {
   const [showForm, setShowForm] = useState("");
   const [hideFirst, setHideFirst] = useState(true);
   const router = useRouter();
 
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value) => {
     setShowForm(value);
     setHideFirst(false);
   };
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
   
     const formData = new FormData(e.currentTarget);
@@ -47,35 +49,82 @@ const LoginPage = () => {
   };
   
   
-  
+  const shapes = [
+    { id: 1, bgColor: "bg-blue-500", size: "w-16 h-16", animation: { x: [-50, 50], y: [50, -50] } },
+    { id: 2, bgColor: "bg-red-500", size: "w-12 h-12 rounded-full", animation: { x: [100, -100], y: [-100, 100] } },
+    { id: 3, bgColor: "bg-green-500", size: "w-20 h-20", animation: { scale: [1, 1.5] } },
+    { id: 4, bgColor: "bg-yellow-500", size: "w-14 h-14 rounded-full", animation: { rotate: [0, 360] } },
+  ];
   
 
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
+  // const defaultOptions = {
+  //   loop: true,
+  //   autoplay: true,
+  //   animationData,
+  //   rendererSettings: {
+  //     preserveAspectRatio: "xMidYMid slice",
+  //   },
+  // };
+
 
   return (
-    <div className="relative w-screen h-screen flex flex-col justify-center items-center overflow-hidden ">
+    <div>
+      {/* <LoginForm /> */}
+      <div className="relative w-screen h-screen flex flex-col justify-center items-center overflow-hidden ">
       {/* Lottie Background Animation */}
       <div className="absolute inset-0 z-0 justify-center  w-[100%] h-[100%] items-center flex">
-        <Lottie options={defaultOptions} 
+        {/* <Lottie options={defaultOptions} 
         style={{
           width: "60%",
           height: "100%",
           objectFit: "contain",
         }}
-        />
+        /> */}
+        {/* Large Animated Circle */}
+      <motion.div
+        className="absolute w-[500px] h-[500px] bg-orange-400 rounded-full filter  opacity-80"
+        animate={{
+          scale: [1, 1.5, 1], // Pulsating effect
+        }}
+        transition={{
+          duration: 6, // Animation duration
+          repeat: Infinity, // Infinite loop
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* Second Animated Circle */}
+      <motion.div
+        className="absolute w-[700px] h-[600px] bg-orange-400 rounded-full filter opacity-30"
+        animate={{
+          scale: [1, 1.3, 1], // Slightly different scaling effect
+          rotate: [0, 360], // Subtle rotation
+        }}
+        transition={{
+          duration: 8, // Animation duration
+          repeat: Infinity, // Infinite loop
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* Third Animated Circle */}
+      <motion.div
+        className="absolute w-[900px] h-[900px] bg-orange-400 rounded-full filter opacity-40"
+        animate={{
+          scale: [1.2, 1.5, 1.2], // Pulsating effect
+        }}
+        transition={{
+          duration: 10, // Longer animation duration
+          repeat: Infinity, // Infinite loop
+          ease: "easeInOut",
+        }}
+      />
       </div>
 
       <div className="relative z-10 w-full max-w-md  p-8 flex flex-col gap-6">
         {hideFirst && (
           <>
-            <h1 className="text-3xl font-comfortaa font-extrabold text-[#fd7e1d] text-center">
+            <h1 className="text-3xl font-comfortaa font-extrabold text-white text-center">
               Select Login Type
             </h1>
 
@@ -146,6 +195,7 @@ const LoginPage = () => {
           </>
         )}
       </div>
+    </div>
     </div>
   );
 }

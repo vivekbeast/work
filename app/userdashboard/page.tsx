@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 
 
-const Userdashboard = () => {
+const UserDash = () =>{
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
   type Task = {
@@ -54,7 +54,7 @@ const Userdashboard = () => {
     }
   }, [userId]);
 
-  const LoadingFallback = () => <div>Loading...</div>;
+  // const LoadingFallback = () => <div>Loading...</div>;
 
   // Handle task status change with confirmation modal
   const handleTaskStatusChange = (taskName: string, status: string) => {
@@ -129,10 +129,8 @@ const Userdashboard = () => {
       [id]: false, // Close popup for this specific task ID
     }));
   };
-
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <div className="h-screen flex flex-col justify-start items-start overflow-hidden font-comfortaa">
+    <div className="h-screen flex flex-col justify-start items-start overflow-hidden font-comfortaa">
         <div className="relative z-10 w-full max-w-6xl p-8 flex flex-col gap-8">
           <div className=" w-screen flex flex-col gap-4">
             <motion.h1
@@ -305,6 +303,16 @@ const Userdashboard = () => {
           )}
         </div>
       </div>
+  )
+}
+
+
+const Userdashboard = () => {
+ 
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <UserDash />
     </Suspense>  
   );
 };

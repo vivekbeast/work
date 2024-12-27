@@ -75,32 +75,57 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return NextResponse.json({ error: "User ID is required." }, { status: 400 });
-  }
+  const userId = searchParams.get('userId'); // Get userId from query params
 
   try {
+    // Connect to MongoDB
     await connectMongodb();
 
-    const user = await SubuserForm.findOne({ userId });
+    if (userId) {
+      // If userId is provided, fetch tasks for the specific user
+      const user = await SubuserForm.findOne({ userId });
 
-    if (!user) {
-      return NextResponse.json({ error: "User not found." }, { status: 404 });
+      if (!user) {
+        return NextResponse.json({ error: 'User not found.' }, { status: 404 });
+      }
+
+      return NextResponse.json(
+        { message: 'Tasks fetched successfully.', tasks: user.tasks || [] },
+        { status: 200 }
+      );
+    } else {
+      // If no userId is provided, fetch tasks for all users
+      const allUsers = await SubuserForm.find(); // Adjust query based on how you want to fetch data
+
+      // Accumulate all tasks and user names
+      const allTasks = allUsers.reduce((tasks: any[], user: any) => {
+        if (user.tasks) {
+          tasks.push(...user.tasks); // Accumulate tasks from all users
+        }
+        return tasks;
+      }, []);
+
+      // Extract user ids and their corresponding tasks
+      const userNames = allUsers.map(user => ({
+        userId: user.userId, // Assuming `userId` is a property in your user data
+        tasks: user.tasks || [] // Add tasks for this user
+      }));
+
+      return NextResponse.json(
+        { message: 'Tasks and user names fetched successfully.', allTasks, userNames },
+        { status: 200 }
+      );
     }
 
-    return NextResponse.json(
-      { message: "Tasks fetched successfully.", tasks: user.tasks },
-      { status: 200 }
-    );
   } catch (error) {
     console.error("Error fetching data:", error);
-    return NextResponse.json({ error: "Failed to fetch form data." }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch data.' }, { status: 500 });
   }
 }
+
 
 
 
