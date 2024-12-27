@@ -142,7 +142,7 @@ useEffect(() => {
   const fetchUserData = async () => {
     if (!session?.user) return;
 
-    const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session.user.email}`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/user?email=${session.user.email}`;
     console.log("Constructed API URL:", apiUrl);
 
     try {
