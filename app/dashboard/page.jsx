@@ -34,7 +34,7 @@ const handleTaskchange = (e) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  if (!uniqueCompanyNames.includes(userId)) {
+  if (!uniqueCompanyNames.some(companyId => companyId === userId)) {
     setErrorMessage("Invalid User ID! Please use a valid User ID.");
     return;
   }
