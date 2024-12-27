@@ -35,11 +35,11 @@ const DashBoard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!uniqueCompanyNames.includes(userId)) {
-      setErrorMessage("Invalid User ID! Please use a valid User ID.");
-      return;
-    }
-    setErrorMessage("");
+    // if (!uniqueCompanyNames.includes(userId)) {
+    //   setErrorMessage("Invalid User ID! Please use a valid User ID.");
+    //   return;
+    // }
+    // setErrorMessage("");
 
     const formData = new FormData();
     formData.append("userId", userId);
@@ -241,7 +241,7 @@ const DashBoard = () => {
                     required
                     className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
                   />
-                  {errorMessage && (
+                  {/* {errorMessage && (
                     <div className="absolute z-20 top-12 left-0 w-full bg-red-500 text-white text-sm p-2 rounded-lg text-center">
                       <div className="flex justify-between items-center">
                         <span>{errorMessage}</span>
@@ -250,7 +250,7 @@ const DashBoard = () => {
                         </button>
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div className="relative flex flex-col">
                   <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Date</label>
