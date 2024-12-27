@@ -28,9 +28,9 @@ const DashBoard = () => {
     setUserId(e.target.value);
   };
 
-  // const handleTaskChange = (e) => {
-  //   setTaskName(e.target.value);
-  // };
+  const handleTaskChange = (e) => {
+    setTaskName(e.target.value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -279,7 +279,7 @@ const DashBoard = () => {
                   <input
                     type="text"
                     value={taskName}
-                    onChange={handleTaskchange}
+                    onChange={handleTaskChange}
                     required
                     className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
                   />
