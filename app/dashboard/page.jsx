@@ -140,10 +140,12 @@ const handleSubmit = async (e) => {
 
   useEffect(() => {
     if (session?.user) {
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session.user.email}`)
+      console.log('Session Data:', session); // Log session data to ensure the email is present
+  
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session?.user.email}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log('API Response:', data); // Log the response data
+          console.log('API Response:', data); // Log API response to see if companyName is present
   
           if (data?.companyName) {
             let companyNamesArray = [];
@@ -160,6 +162,7 @@ const handleSubmit = async (e) => {
         });
     }
   }, [session]);
+  
   
 
     // Get unique userIds
