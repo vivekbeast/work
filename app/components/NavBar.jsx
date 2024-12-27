@@ -74,7 +74,7 @@ const NavBar = () => {
         </Link>
         </div> : <div className=' '>
         <Link
-          href="/login"
+          href="/loginpage"
           // onClick={()=> router.push("/loginpage")}
           className="bg-white text-lg font-semibold text-[#fd7e1d] py-2 cursor-pointer px-4 rounded-md font-comfortaa hover:bg-gray-200 transition"
         >

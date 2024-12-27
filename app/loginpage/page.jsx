@@ -31,7 +31,7 @@ const LoginPage = () => {
   
     try {
       // const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";    LATER AFTER DEPLOYEMENT
-      const response = await fetch(`/api/subuser?userId=${encodeURIComponent(userId)}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser?userId=${encodeURIComponent(userId)}`, {
         method: "GET",
         cache: "no-cache",
       });

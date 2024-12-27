@@ -48,7 +48,7 @@ const handleSubmit = async (e) => {
   formData.append("taskName",taskName);
   
 
-  const promise = fetch("http://localhost:3000/api/subuser", {
+  const promise = fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser`, {
     method: "POST",
     body: formData,
   }).then(async (response) => {
@@ -113,7 +113,7 @@ const handleSubmit = async (e) => {
 
   const fetchUserTasks = async () => {
     try {
-      const response = await fetch(`/api/subuser`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser`);
       const data = await response.json();
 
       if (response.ok) {
@@ -136,7 +136,7 @@ const handleSubmit = async (e) => {
 
   useEffect(() => {
     if (session?.user) {
-      fetch(`http://localhost:3000/api/user?email=${session.user.email}`)
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user?email=${session.user.email}`)
         .then((response) => response.json())
         .then((data) => {
           if (data?.companyName) {

@@ -18,7 +18,7 @@ const SignUpMainPage = () => {
       setIsAuthenticated(true);
 
       // Check if user is already registered in the database
-      fetch(`http://localhost:3000/api/user?email=${session.user.email}`)
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user?email=${session.user.email}`)
         .then((response) => response.json())
         .then((data) => {
           if (data?.companyName) {
@@ -45,7 +45,7 @@ const SignUpMainPage = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3000/api/user', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

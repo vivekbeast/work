@@ -30,7 +30,7 @@ const UserDash = () =>{
     if (userId) {
       const fetchUserTasks = async () => {
         try {
-          const response = await fetch(`/api/subuser?userId=${encodeURIComponent(userId)}`);
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser?userId=${encodeURIComponent(userId)}`);
           const data = await response.json();
 
           if (response.ok) {
@@ -66,7 +66,7 @@ const UserDash = () =>{
   const confirmStatusChange = async () => {
     if (selectedTask) {
       try {
-        const response = await fetch(`/api/subuser`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subuser`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
