@@ -32,8 +32,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const email = searchParams.get("email");
 
-  console.log("Full Request URL:", request.url); // Log the full request URL
-  console.log("Parsed Email:", email); // Log the email value
+  console.log("Request URL:", request.url);
+  console.log("Parsed Email:", email);
 
   if (!email) {
     return NextResponse.json(
@@ -43,10 +43,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    console.log("Connecting to MongoDB...");
     await connectMongodb();
-    const user = await User.findOne({ email });
+    console.log("Connected to MongoDB");
 
-    console.log("Fetched User:", user); // Log the fetched user data
+    const user = await User.findOne({ email });
+    console.log("MongoDB Query Result:", user);
 
     if (!user) {
       return NextResponse.json(
@@ -60,11 +62,12 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in API:", error); // Log errors
+    console.error("Error in API:", error);
     return NextResponse.json(
       { error: "An error occurred while fetching user details." },
       { status: 500 }
     );
   }
 }
+
 
