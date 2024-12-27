@@ -138,36 +138,52 @@ const handleSubmit = async (e) => {
 
 
 
-  useEffect(() => {
-    if (session?.user) {
-      const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session.user.email}`;
-      console.log("Constructed API URL:", apiUrl);
-  
-      fetch(apiUrl)
-        .then((response) => {
-          console.log("API Response Status:", response.status);
-          return response.json();
-        })
-        .then((data) => {
-          console.log("API Response Data:", data);
-  
-          if (data?.companyName) {
-            let companyNamesArray = [];
-            for (let i = 1; i <= 9; i++) {
-              companyNamesArray.push(`${data.companyName}${i}`);
-            }
-            setUniqueCompanyNames(companyNamesArray);
-          } else {
-            console.error("No company name found in API response");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    }
+useEffect(() => {
+  const fetchUserData = async () => {
+    if (!session?.user) return;
 
-    fetchUserTasks();
-  }, [session]);
+    const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/user?email=${session.user.email}`;
+    console.log("Constructed API URL:", apiUrl);
+
+    try {
+      const response = await fetch(apiUrl);
+
+      // Log the response status for debugging
+      console.log("API Response Status:", response.status);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("API Response Data:", data);
+
+        if (data?.companyName) {
+          const companyNamesArray = Array.from(
+            { length: 9 },
+            (_, i) => `${data.companyName}${i + 1}`
+          );
+          setUniqueCompanyNames(companyNamesArray);
+        } else {
+          console.error("No company name found in API response");
+        }
+      } else {
+        console.error(data.error || "Failed to fetch user data");
+        alert(data.error || "Failed to load user data.");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error fetching user data:", error.message);
+        alert(error.message); // User-friendly error message
+      } else {
+        console.error("An unexpected error occurred:", error);
+        alert("An unexpected error occurred.");
+      }
+    }
+  };
+
+  fetchUserData();
+  fetchUserTasks();
+}, [session]);
+
   
   
   
