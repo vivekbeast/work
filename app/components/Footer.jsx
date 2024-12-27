@@ -67,8 +67,12 @@ const Footer = () => {
       </div>
 
       {/* Trademark/Copyright */}
-      <div className="text-center text-sm text-gray-200 mt-6">
-        © {new Date().getFullYear()} WorkOrbit. All rights reserved.
+      <div className="text-center w-full text-sm text-gray-200 mt-6">
+       <h1> © {new Date().getFullYear()} WorkOrbit. All rights reserved.</h1> 
+       <div className="text-center text-black text-lg font-bold mt-2">
+  Developed by: Vivek Tarnallya
+     </div>
+
       </div>
     </footer>
   );
