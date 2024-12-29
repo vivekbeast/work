@@ -197,149 +197,153 @@ useEffect(() => {
     }, [taskData]);
     
   return (
-    <div className='h-auto w-screen flex flex-row justify-center items-center px-4 pb-20'>
-      <div className='w-1/2 flex flex-col justify-center items-center mt-8 '>
-        <h1 className=' font-comfortaa text-start w-full text-3xl text-black pl-11 tracking-wide font-medium'>Live Report</h1>
-        <div className='grid grid-cols-3 gap-6 justify-center items-center'>
-        {uniqueUserIds
-  .filter((userId) => uniqueCompanyNames.includes(userId)) // Filters based on uniqueCompanyNames
-  .map((userId, index) => {
-    const tasks = groupedTasks[userId] || [];
-    const taskCount = tasks.length;
+    <div className="h-auto overflow-y-scroll w-screen flex flex-col-reverse lg:flex-row justify-center items-center px-4 pb-20">
+  <div className="w-full sm:w-3/4 md:w-1/2 flex flex-col justify-center items-center mt-8">
+    <h1 className="font-comfortaa text-start w-full text-3xl text-black pl-11 tracking-wide font-medium">
+      Live Report
+    </h1>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center items-center">
+      {uniqueUserIds
+        .filter((userId) => uniqueCompanyNames.includes(userId))
+        .map((userId, index) => {
+          const tasks = groupedTasks[userId] || [];
+          const taskCount = tasks.length;
 
-    return (
-      <div key={index} className="h-[150px] w-[200px] bg-white flex justify-center flex-col text-center rounded-lg mt-4 shadow-lg">
-        <h1 className="w-full h-[50px] font-semibold rounded-t-lg text-black py-3 bg-orange-400">
-          ID - <span className='text-black'>{userId}</span>
-        </h1>
-        <div className=' h-[100px] flex justify-center items-center'>
-          <div className="">
-            <h3 className="font-medium">Number of tasks: {taskCount}</h3>
-            <button
-              className="text-sm text-blue-500 underline"
-              onClick={() => handleOpenPopup(userId)}
-            >
-              View Tasks
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  })}
-
-      </div>
-      {popupOpen && selectedUserId && (
-        <div className="popup fixed w-screen h-screen inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-1/2 h-1/2 overflow-y-scroll">
-            <h2 className="text-xl font-semibold mb-4">Tasks for {selectedUserId}</h2>
-            <div className="space-y-4 ">
-              {groupedTasks[selectedUserId]?.map((task, index) => (
-                <div key={index} className="task-item">
-                  <p><strong>Task {index + 1}:</strong></p>
-                  <p className=' overflow-x-scroll'>Description: {task.taskDescription}</p>
-                  <p>Status: {task.status}</p>
-                  <p>Task Date: {new Date(task.taskDate).toLocaleDateString()}</p>
-                  <p>Submission Date: {new Date(task.submissionDate).toLocaleDateString()}</p>
-                </div>
-              ))}
-            </div>
-            <button
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
-              onClick={handleClosePopup}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-      </div>
-
-      <div className="flex flex-col w-1/2 justify-center items-center h-auto mb-7">
-        <div className="w-full flex items-center justify-center text-start mt-10">
-          <h2 className="text-xl font-semibold whitespace-normal tracking-wide font-comfortaa text-start w-full text-black">
-          Unique Employee IDs from {companyName}0 - {companyName}9
-          </h2>
-        </div>
-        <div className="w-fit h-[500px] flex flex-col justify-center items-center bg-white mt-4 py-4 px-11 rounded-lg shadow-lg">
-          <h2 className="text-3xl font-medium tracking-wide font-modak text-center mb-2 text-[#fd7e1d]">Work Submission Form</h2>
-
-          <form onSubmit={handleSubmit} className="h-[80%] flex flex-col justify-center gap-10 items-center">
-            <div className='grid grid-cols-2 space-y-0 space-x-8'>
-              <div className='space-y-12'>
-                <div className="relative flex flex-col">
-                  <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">User ID</label>
-                  <input
-                    type="text"
-                    value={userId}
-                    onChange={handleUserIdChange}
-                    required
-                    className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
-                  />
-                  {errorMessage && (
-                    <div className="absolute z-20 top-12 left-0 w-full bg-red-500 text-white text-sm p-2 rounded-lg text-center">
-                      <div className="flex justify-between items-center">
-                        <span>{errorMessage}</span>
-                        <button onClick={() => setErrorMessage('')} className="text-black absolute -top-3 -right-3 text-2xl bg-white rounded-full font-bold hover:text-[#fd7e1d]">
-                          <BiXCircle />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="relative flex flex-col">
-                  <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Date</label>
-                  <input
-                    type="date"
-                    value={taskDate}
-                    onChange={(e) => setTaskDate(e.target.value)}
-                    required
-                    className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
-                  />
-                </div>
-                <div className="relative flex flex-col">
-                  <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Submission Date</label>
-                  <input
-                    type="date"
-                    value={submissionDate}
-                    onChange={(e) => setSubmissionDate(e.target.value)}
-                    required
-                    className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
-                  />
-                </div>
-              </div>
-              <div className='space-y-6'>
-              <div className="relative flex flex-col">
-                  <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Name</label>
-                  <input
-                    type="text"
-                    value={taskName}
-                    onChange={handleTaskchange}
-                    required
-                    className="p-2 border border-[#000000A6] rounded-md w-[280px] h-11 text-black focus:outline-none"
-                  />
-                </div>
-                <div className="relative flex flex-col">
-                  <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Description</label>
-                  <textarea
-                    value={taskDescription}
-                    onChange={(e) => setTaskDescription(e.target.value)}
-                    placeholder="Describe your task here"
-                    rows="5"
-                    required
-                    className="p-2 border border-[#000000A6] rounded-md w-[280px] text-black focus:outline-none"
-                  />
+          return (
+            <div key={index} className="h-[150px] w-[200px] sm:w-[250px] bg-white flex justify-center flex-col text-center rounded-lg mt-4 shadow-lg">
+              <h1 className="w-full h-[50px] font-semibold rounded-t-lg text-black py-3 bg-orange-400">
+                ID - <span className='text-black'>{userId}</span>
+              </h1>
+              <div className='h-[100px] flex justify-center items-center'>
+                <div>
+                  <h3 className="font-medium">Number of tasks: {taskCount}</h3>
+                  <button
+                    className="text-sm text-blue-500 underline"
+                    onClick={() => handleOpenPopup(userId)}
+                  >
+                    View Tasks
+                  </button>
                 </div>
               </div>
             </div>
-            <div className="flex justify-center items-center self-center">
-              <button type="submit"  className="px-8 py-3 text-md font-medium bg-black text-white rounded-lg shadow-md hover:text-[#fd7e1d] transition duration-300">
-                Submit Task
+          );
+        })}
+    </div>
+
+    {popupOpen && selectedUserId && (
+      <div className="popup fixed w-screen h-screen inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+        <div className="bg-white p-6 rounded-lg w-11/12 sm:w-3/4 md:w-1/2 h-1/2 overflow-y-scroll">
+          <h2 className="text-xl font-semibold mb-4">Tasks for {selectedUserId}</h2>
+          <div className="space-y-4">
+            {groupedTasks[selectedUserId]?.map((task, index) => (
+              <div key={index} className="task-item">
+                <p><strong>Task {index + 1}:</strong></p>
+                <p className='overflow-x-scroll'>Description: {task.taskDescription}</p>
+                <p>Status: {task.status}</p>
+                <p>Task Date: {new Date(task.taskDate).toLocaleDateString()}</p>
+                <p>Submission Date: {new Date(task.submissionDate).toLocaleDateString()}</p>
+              </div>
+            ))}
+          </div>
+          <button
+            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
+            onClick={handleClosePopup}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+
+  <div className="flex flex-col w-full  lg:w-1/2 justify-center items-center h-auto mb-7">
+    <div className="w-full flex items-center justify-center text-start mt-10">
+      <h2 className=" text-md sm:text-xl font-semibold whitespace-normal tracking-wide font-comfortaa text-start w-full text-black">
+        Unique Employee IDs from {companyName}1 - {companyName}9
+      </h2>
+    </div>
+    <div className="w-full h-[700px] sm:h-[700px] md:h-[600px] lg:h-[500px] flex flex-col  items-center bg-white mt-4 py-4 rounded-lg shadow-lg">
+      <h2 className=" text-2xl sm:text-3xl font-medium tracking-wide font-modak text-center mt-6 text-[#fd7e1d]">Work Submission Form</h2>
+
+      <form onSubmit={handleSubmit} className="h-full flex flex-col justify-center gap-10 items-center">
+  <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 w-full'>
+    <div className='space-y-12'>
+      <div className="relative flex flex-col justify-center items-center">
+        <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">User ID</label>
+        <input
+          type="text"
+          value={userId}
+          onChange={handleUserIdChange}
+          required
+          className="p-2 border border-[#000000A6] rounded-md w-[250px] sm:w-[300px] h-11 text-black focus:outline-none"
+        />
+        {errorMessage && (
+          <div className="absolute z-20 top-12 left-0 w-full bg-red-500 text-white text-sm p-2 rounded-lg text-center">
+            <div className="flex justify-between items-center">
+              <span>{errorMessage}</span>
+              <button onClick={() => setErrorMessage('')} className="text-black absolute -top-3 -right-3 text-2xl bg-white rounded-full font-bold hover:text-[#fd7e1d]">
+                <BiXCircle />
               </button>
             </div>
-          </form>
-        </div>
+          </div>
+        )}
+      </div>
+      <div className="relative flex flex-col">
+        <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Date</label>
+        <input
+          type="date"
+          value={taskDate}
+          onChange={(e) => setTaskDate(e.target.value)}
+          required
+          className="p-2 border border-[#000000A6] rounded-md w-[250px] sm:w-[300px] h-11 text-black focus:outline-none"
+        />
+      </div>
+      <div className="relative flex flex-col">
+        <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Submission Date</label>
+        <input
+          type="date"
+          value={submissionDate}
+          onChange={(e) => setSubmissionDate(e.target.value)}
+          required
+          className="p-2 border border-[#000000A6] rounded-md w-[250px] sm:w-[300px] h-11 text-black focus:outline-none"
+        />
       </div>
     </div>
+    <div className='space-y-6'>
+      <div className="relative flex flex-col">
+        <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Name</label>
+        <input
+          type="text"
+          value={taskName}
+          onChange={handleTaskchange}
+          required
+          className="p-2 border border-[#000000A6] rounded-md w-[250px] sm:w-[300px] h-11 text-black focus:outline-none"
+        />
+      </div>
+      <div className="relative flex flex-col">
+        <label className="absolute -top-3 left-2 text-[#000000D9] bg-[#FFFFFF] px-[12px] text-md">Task Description</label>
+        <textarea
+          value={taskDescription}
+          onChange={(e) => setTaskDescription(e.target.value)}
+          placeholder="Describe your task here"
+          rows="5"
+          required
+          className="p-2 border border-[#000000A6] rounded-md w-[250px] sm:w-[300px] text-black focus:outline-none"
+        />
+      </div>
+    </div>
+  </div>
+  <div className="flex justify-center items-center self-center w-full">
+    <button type="submit" className="px-8 py-3 text-md font-medium bg-black text-white rounded-lg shadow-md hover:text-[#fd7e1d] transition duration-300 w-full sm:w-auto">
+      Submit Task
+    </button>
+  </div>
+</form>
+
+    </div>
+  </div>
+</div>
+
   );
 };
 
