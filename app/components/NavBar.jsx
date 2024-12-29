@@ -157,23 +157,24 @@ const NavBar = () => {
             FAQ
           </Link>
           {changeLog ? (
-            <div className="flex items-center gap-4">
-              <img
-                src={session?.user?.image}
-                alt="userLogo"
-                className="w-10 h-10 rounded-full"
-              />
-              <span className="font-comfortaa font-medium">
-                Hello!!, {session?.user?.name}
-              </span>
-              <Link
-                href="/loginpage"
-                onClick={handleSignOut}
-                className="bg-[#fd7e1d] text-white py-2 px-4 rounded-md font-comfortaa hover:bg-[#e66d14] transition"
-              >
-                Sign Out
-              </Link>
-            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+            <img
+              src={session?.user?.image}
+              alt="userLogo"
+              className="w-10 h-10 rounded-full"
+            />
+            <span className="font-comfortaa font-medium text-center sm:text-left">
+              Hello!!, {session?.user?.name}
+            </span>
+            <Link
+              href="/loginpage"
+              onClick={handleSignOut}
+              className="bg-[#fd7e1d] text-white py-2 px-4 rounded-md font-comfortaa hover:bg-[#e66d14] transition w-full sm:w-auto text-center sm:text-left"
+            >
+              Sign Out
+            </Link>
+          </div>
+          
           ) : (
             <Link
               href="/loginpage"
